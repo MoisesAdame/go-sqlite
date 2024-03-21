@@ -1,7 +1,7 @@
 // Author: Moisés Adame-Aguilar
 // Creation Date: March 18th, 2024
 
-package lib
+package buffer
 
 import(
 	"bytes"

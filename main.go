@@ -1,15 +1,12 @@
 package main
 
 import (
-	// "fmt"
-	// "./lib/models"
-	// "bytes"
-	"./cli"
+	"./lib/cli"
 )
 
 func main() {
 
-	cli := cli.NewCLI()
+	mainCli := cli.NewCLI()
 
-	cli.Run()
+	mainCli.Run()
 }

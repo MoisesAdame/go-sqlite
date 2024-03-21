@@ -4,8 +4,8 @@
 package cli
 
 import (
-	"os"
-	"../lib/models"
+	"../buffer"
+	"../commands"
 	"fmt"
 )
 
@@ -22,26 +22,28 @@ func printPrompt() {
 }
 
 // readInput reads from the user input and stores it as a buffer.
-func readInput(ib *lib.InputBuffer) {
+func readInput(ib *buffer.InputBuffer) {
 	var input string
 	fmt.Scan(&input)
 	ib.ReadFromString(input)
 }
 
+// Run prints prompt and receives input from user.
 func (cli *CLI) Run(){
 
-	inputBuffer := lib.NewInputBuffer()
+	inputBuffer := buffer.NewInputBuffer()
 
 	for {
 		printPrompt()
 
 		readInput(inputBuffer)
 
-		if(inputBuffer.ToString() == ".exit") {
-			fmt.Println("Bye!")
-			os.Exit(1)
-		}else{
-			fmt.Println("Unrecognized command.")
+		if(inputBuffer.ToString()[0] == byte('.')){
+			command := commands.ExecuteMetaCommand(inputBuffer)
+
+			if(!command.IsSuccesful) {
+				fmt.Println("Unrecognized command " + inputBuffer.ToString())
+			}
 		}
     }
 }
