@@ -44,6 +44,15 @@ func (cli *CLI) Run(){
 			if(!command.IsSuccesful) {
 				fmt.Println("Unrecognized command " + inputBuffer.ToString())
 			}
+		}else{
+			statement := commands.NewStatement()
+			prepare := commands.PrepareStatement(inputBuffer, statement)
+
+			if(prepare.IsSuccesful){
+				commands.ExecuteStatement(statement)
+			}else{
+				fmt.Println("Unrecognized keyword at start of " + inputBuffer.ToString())
+			}
 		}
     }
 }
