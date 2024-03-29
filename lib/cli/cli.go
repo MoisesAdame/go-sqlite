@@ -7,6 +7,9 @@ import (
 	"../buffer"
 	"../commands"
 	"fmt"
+	"bufio"
+	"os"
+	"../models"
 )
 
 type CLI struct {}
@@ -24,7 +27,11 @@ func printPrompt() {
 // readInput reads from the user input and stores it as a buffer.
 func readInput(ib *buffer.InputBuffer) {
 	var input string
-	fmt.Scan(&input)
+	
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	input = scanner.Text()
+
 	ib.ReadFromString(input)
 }
 
@@ -45,8 +52,10 @@ func (cli *CLI) Run(){
 				fmt.Println("Unrecognized command " + inputBuffer.ToString())
 			}
 		}else{
+			table := models.NewTable(3)
+
 			statement := commands.NewStatement()
-			prepare := commands.PrepareStatement(inputBuffer, statement)
+			prepare := commands.PrepareStatement(inputBuffer, statement, table)
 
 			if(prepare.IsSuccesful){
 				commands.ExecuteStatement(statement)

@@ -6,6 +6,8 @@ package commands
 import (
 	"../buffer"
 	"fmt"
+	"strings"
+	"../models"
 )
 
 // PrepareResult represents a command result.
@@ -44,12 +46,23 @@ func NewInsertStatement() *Statement {
 }
 
 // PrepareStatement based on the command input given, returns a PrepareResult.
-func PrepareStatement(ib *buffer.InputBuffer, statement *Statement) PrepareResult {
+func PrepareStatement(ib *buffer.InputBuffer, statement *Statement, table *models.Table) PrepareResult {
 
 	bufferString := ib.ToString()
 
 	if(len(bufferString) >= 6 && bufferString[:6] == "insert"){
 		statement.Type = "insert"
+
+		tokens := strings.Fields(bufferString)[1:]
+
+		if(len(tokens) != table.Size()){
+			return NewUnsuccesfulPrepare()
+		}else{
+			row := models.NewRowFromSlice(tokens)
+
+			row.Print()
+		}
+
 		return NewSuccessfulPrepare()
 	}else if(bufferString == "select"){
 		statement.Type = "select"
